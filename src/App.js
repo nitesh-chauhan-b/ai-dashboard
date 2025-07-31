@@ -108,6 +108,75 @@ const ThemeProvider = ({ children }) => {
 
 // --- Reusable Components ---
 
+const MobileMenu = ({ isOpen, onClose, activeTab, setActiveTab, theme }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 lg:hidden">
+      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+      <div className={`fixed top-0 left-0 h-full w-64 ${theme === 'light' ? 'bg-white' : 'bg-gray-900'} shadow-xl transform transition-transform duration-300 ease-in-out`}>
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center space-x-3">
+            <img 
+              src="/brand_logo.png" 
+              alt="ADmyBRAND Logo" 
+              className="w-8 h-8 rounded-lg"
+              onError={(e) => e.target.style.display = 'none'}
+            />
+            <span className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800">
+              ADmyBRAND
+            </span>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            <XCircle className="w-6 h-6" />
+          </button>
+        </div>
+        <nav className="p-4 space-y-2">
+          <button
+            onClick={() => { setActiveTab('overview'); onClose(); }}
+            className={`w-full flex items-center p-3 rounded-xl transition-all duration-200 ${
+              activeTab === 'overview'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                : theme === 'light' 
+                  ? 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-gray-300 hover:bg-gray-700/50 hover:text-white'
+            }`}
+          >
+            <Home className="w-6 h-6 mr-3" />
+            <span>Overview</span>
+          </button>
+          <button
+            onClick={() => { setActiveTab('charts'); onClose(); }}
+            className={`w-full flex items-center p-3 rounded-xl transition-all duration-200 ${
+              activeTab === 'charts'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                : theme === 'light' 
+                  ? 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-gray-300 hover:bg-gray-700/50 hover:text-white'
+            }`}
+          >
+            <BarChart2 className="w-6 h-6 mr-3" />
+            <span>Charts</span>
+          </button>
+          <button
+            onClick={() => { setActiveTab('table'); onClose(); }}
+            className={`w-full flex items-center p-3 rounded-xl transition-all duration-200 ${
+              activeTab === 'table'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                : theme === 'light' 
+                  ? 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  : 'text-gray-300 hover:bg-gray-700/50 hover:text-white'
+            }`}
+          >
+            <Table className="w-6 h-6 mr-3" />
+            <span>Data Table</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+  );
+};
+
 const LoadingSkeleton = ({ type = 'card' }) => {
   const { theme } = useContext(ThemeContext);
   const isDark = theme === 'dark';
@@ -160,16 +229,16 @@ const MetricCard = ({ title, value, change, icon: Icon, isLoading, gradient = 'f
   }
 
   return (
-    <div className={`bg-gradient-to-br ${gradient} rounded-2xl shadow-2xl p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-3xl border ${isDark ? 'border-gray-700/50' : 'border-gray-300/50'}`}>
+    <div className={`bg-gradient-to-br ${gradient} rounded-2xl shadow-2xl p-4 sm:p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-3xl border ${isDark ? 'border-gray-700/50' : 'border-gray-300/50'}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white/90 dark:text-gray-900">{title}</h3>
+        <h3 className="text-sm sm:text-lg font-semibold text-white/90 dark:text-gray-900">{title}</h3>
         {Icon && <Icon className="text-white/80 dark:text-gray-700 w-6 h-6" />}
       </div>
-      <div className="text-4xl font-bold text-white dark:text-gray-900 mb-2">
+      <div className="text-2xl sm:text-4xl font-bold text-white dark:text-gray-900 mb-2">
         {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
       {change !== undefined && (
-        <p className={`text-sm ${changeColorClass} font-medium flex items-center`}>
+        <p className={`text-xs sm:text-sm ${changeColorClass} font-medium flex items-center`}>
           <span className="mr-1">{arrow}</span>
           {Math.abs(change)}% vs last period
         </p>
@@ -195,9 +264,9 @@ const ChartContainer = ({ title, children, isLoading, gradient = 'from-gray-800 
     : 'text-gray-900';
   
   return (
-    <div className={`${containerClasses} rounded-2xl shadow-2xl p-6 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-3xl border ${containerClasses.includes('border-gray-700') ? 'border-gray-700/50' : 'border-gray-300/50'}`}>
-      <h3 className={`text-lg font-semibold ${titleClasses} mb-4`}>{title}</h3>
-      <div className="h-80 w-full">
+    <div className={`${containerClasses} rounded-2xl shadow-2xl p-4 sm:p-6 transform transition-all duration-300 hover:scale-[1.02] hover:shadow-3xl border ${containerClasses.includes('border-gray-700') ? 'border-gray-700/50' : 'border-gray-300/50'}`}>
+      <h3 className={`text-sm sm:text-lg font-semibold ${titleClasses} mb-4`}>{title}</h3>
+      <div className="h-64 sm:h-80 w-full">
         {children}
       </div>
     </div>
@@ -262,27 +331,27 @@ const DataTable = ({ data, columns, isLoading }) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className={`bg-gradient-to-br ${isDark ? 'from-gray-800 to-gray-900' : 'from-gray-100 to-gray-200'} rounded-2xl shadow-2xl p-6 border ${isDark ? 'border-gray-700/50' : 'border-gray-300/50'}`}>
-      <h3 className={`text-lg font-semibold ${isDark ? 'text-white/90' : 'text-gray-900'} mb-4`}>Campaign Performance</h3>
+    <div className={`bg-gradient-to-br ${isDark ? 'from-gray-800 to-gray-900' : 'from-gray-100 to-gray-200'} rounded-2xl shadow-2xl p-4 sm:p-6 border ${isDark ? 'border-gray-700/50' : 'border-gray-300/50'}`}>
+      <h3 className={`text-sm sm:text-lg font-semibold ${isDark ? 'text-white/90' : 'text-gray-900'} mb-4`}>Campaign Performance</h3>
       
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-4 space-y-3 sm:space-y-0 sm:space-x-4">
-        <div className="relative w-full sm:w-1/3">
+      <div className="flex flex-col lg:flex-row items-center justify-between mb-4 space-y-3 lg:space-y-0 lg:space-x-4">
+        <div className="relative w-full lg:w-1/3">
           <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} size={18} />
           <input
             type="text"
             placeholder="Search campaigns..."
-            className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400' : 'border-gray-400 bg-gray-200 text-gray-900 placeholder-gray-600'} focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200`}
+            className={`w-full pl-10 pr-4 py-2 text-sm rounded-lg border ${isDark ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400' : 'border-gray-400 bg-gray-200 text-gray-900 placeholder-gray-600'} focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full sm:w-2/3">
+        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full lg:w-2/3">
           <div className="relative w-full sm:w-1/2">
             <Calendar className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} size={18} />
             <input
               type="date"
-              className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-400 bg-gray-200 text-gray-900'} focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200`}
+              className={`w-full pl-10 pr-4 py-2 text-sm rounded-lg border ${isDark ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-400 bg-gray-200 text-gray-900'} focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200`}
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
@@ -291,7 +360,7 @@ const DataTable = ({ data, columns, isLoading }) => {
             <Calendar className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} size={18} />
             <input
               type="date"
-              className={`w-full pl-10 pr-4 py-2 rounded-lg border ${isDark ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-400 bg-gray-200 text-gray-900'} focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200`}
+              className={`w-full pl-10 pr-4 py-2 text-sm rounded-lg border ${isDark ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-400 bg-gray-200 text-gray-900'} focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200`}
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
             />
@@ -308,7 +377,7 @@ const DataTable = ({ data, columns, isLoading }) => {
                 <th
                   key={col.accessor}
                   scope="col"
-                  className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'} uppercase tracking-wider cursor-pointer transition-colors`}
+                  className={`px-3 sm:px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'} uppercase tracking-wider cursor-pointer transition-colors whitespace-nowrap`}
                   onClick={() => handleSort(col.accessor)}
                 >
                   <div className="flex items-center">
@@ -328,7 +397,7 @@ const DataTable = ({ data, columns, isLoading }) => {
               currentItems.map((row, rowIndex) => (
                 <tr key={rowIndex} className={`hover:${isDark ? 'bg-gray-700' : 'bg-gray-200'} transition-colors duration-150`}>
                   {columns.map((col) => (
-                    <td key={col.accessor} className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+                    <td key={col.accessor} className={`px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
                       {row[col.accessor]}
                     </td>
                   ))}
@@ -336,7 +405,7 @@ const DataTable = ({ data, columns, isLoading }) => {
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length} className={`px-6 py-4 text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                <td colSpan={columns.length} className={`px-3 sm:px-6 py-4 text-center text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                   No data available for the selected filters.
                 </td>
               </tr>
@@ -346,21 +415,21 @@ const DataTable = ({ data, columns, isLoading }) => {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-4 space-y-3 sm:space-y-0">
         <button
           onClick={() => paginate(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          className="w-full sm:w-auto px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
         >
           Previous
         </button>
-        <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>
+        <span className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
           Page {currentPage} of {totalPages}
         </span>
         <button
           onClick={() => paginate(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          className="w-full sm:w-auto px-4 py-2 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
         >
           Next
         </button>
@@ -507,6 +576,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
@@ -736,12 +806,12 @@ const App = () => {
   return (
     <div className={`flex min-h-screen ${theme === 'light' ? 'bg-gray-50 text-gray-900' : 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white'} font-inter transition-colors duration-300`}>
       {/* Sidebar Navigation */}
-      <aside className={`w-20 sm:w-64 ${theme === 'light' ? 'bg-white shadow-lg' : 'bg-gradient-to-b from-gray-800 to-gray-900 shadow-2xl'} flex flex-col items-center sm:items-start py-8 px-2 sm:px-6 border-r ${theme === 'light' ? 'border-gray-200' : 'border-gray-700/50'} transition-colors duration-300`}>
-        <div className="flex flex-col items-center sm:items-start mb-10">
+      <aside className={`hidden lg:flex w-20 xl:w-64 ${theme === 'light' ? 'bg-white shadow-lg' : 'bg-gradient-to-b from-gray-800 to-gray-900 shadow-2xl'} flex-col items-center xl:items-start py-8 px-2 xl:px-6 border-r ${theme === 'light' ? 'border-gray-200' : 'border-gray-700/50'} transition-colors duration-300`}>
+        <div className="flex flex-col items-center xl:items-start mb-10">
           <img 
             src="/brand_logo.png" 
             alt="ADmyBRAND Logo" 
-            className="w-12 h-12 sm:w-16 sm:h-16 mb-3 rounded-lg shadow-lg"
+            className="w-12 h-12 xl:w-16 xl:h-16 mb-3 rounded-lg shadow-lg"
             onError={(e) => {
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'block';
@@ -750,16 +820,16 @@ const App = () => {
           <img 
             src="/brand_sample_text.png" 
             alt="ADmyBRAND" 
-            className="w-24 sm:w-36 h-6 sm:h-8 mb-2"
+            className="hidden xl:block w-36 h-8 mb-2"
             onError={(e) => {
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'block';
             }}
           />
-          <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 hidden sm:block" style={{display: 'none'}}>
+          <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 hidden xl:block" style={{display: 'none'}}>
             ADmyBRAND
           </div>
-          <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 block sm:hidden" style={{display: 'none'}}>
+          <div className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 block xl:hidden" style={{display: 'none'}}>
             AD
           </div>
         </div>
@@ -775,8 +845,8 @@ const App = () => {
                   : 'text-gray-300 hover:bg-gray-700/50 hover:text-white'
             }`}
           >
-            <Home className="w-6 h-6 mr-0 sm:mr-3" />
-            <span className="hidden sm:block">Overview</span>
+            <Home className="w-6 h-6 mr-0 xl:mr-3" />
+            <span className="hidden xl:block">Overview</span>
           </button>
           <button
             onClick={() => setActiveTab('charts')}
@@ -788,8 +858,8 @@ const App = () => {
                   : 'text-gray-300 hover:bg-gray-700/50 hover:text-white'
             }`}
           >
-            <BarChart2 className="w-6 h-6 mr-0 sm:mr-3" />
-            <span className="hidden sm:block">Charts</span>
+            <BarChart2 className="w-6 h-6 mr-0 xl:mr-3" />
+            <span className="hidden xl:block">Charts</span>
           </button>
           <button
             onClick={() => setActiveTab('table')}
@@ -801,61 +871,80 @@ const App = () => {
                   : 'text-gray-300 hover:bg-gray-700/50 hover:text-white'
             }`}
           >
-            <Table className="w-6 h-6 mr-0 sm:mr-3" />
-            <span className="hidden sm:block">Data Table</span>
+            <Table className="w-6 h-6 mr-0 xl:mr-3" />
+            <span className="hidden xl:block">Data Table</span>
           </button>
         </nav>
       </aside>
 
+      {/* Mobile Menu */}
+      <MobileMenu 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)} 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        theme={theme} 
+      />
+
       {/* Main Content Area */}
-      <main className="flex-1 p-6 sm:p-8 overflow-y-auto">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-4">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <header className="flex items-center justify-between mb-6 sm:mb-8">
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="lg:hidden p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
+          >
+            <Settings className="w-6 h-6" />
+          </button>
+          
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <img 
               src="/brand_logo.png" 
               alt="ADmyBRAND Logo" 
-              className="w-12 h-12 rounded-lg shadow-lg"
+              className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg shadow-lg lg:hidden"
               onError={(e) => {
                 e.target.style.display = 'none';
               }}
             />
             <div>
-              <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800">
+              <h1 className="text-xl sm:text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800">
                 {activeTab === 'overview' && 'Insights Overview'}
                 {activeTab === 'charts' && 'Interactive Analytics Charts'}
                 {activeTab === 'table' && 'Campaign Performance Data'}
               </h1>
-              <p className={`mt-2 ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'}`}>Digital marketing analytics platform for agencies</p>
+              <p className={`mt-1 sm:mt-2 text-xs sm:text-sm ${theme === 'light' ? 'text-gray-600' : 'text-gray-400'} hidden sm:block`}>Digital marketing analytics platform for agencies</p>
             </div>
           </div>
           
-          <div className="flex space-x-3">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
             <button
               onClick={toggleTheme}
-              className={`p-3 rounded-full ${theme === 'light' ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700'} transition-all duration-200 shadow-lg`}
+              className={`p-2 sm:p-3 rounded-full ${theme === 'light' ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700'} transition-all duration-200 shadow-lg`}
             >
-              {theme === 'light' ? <Moon className="w-6 h-6 text-gray-700" /> : <Sun className="w-6 h-6 text-gray-200" />}
+              {theme === 'light' ? <Moon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" /> : <Sun className="w-5 h-5 sm:w-6 sm:h-6 text-gray-200" />}
             </button>
-            <button
-              onClick={() => handleExport('CSV')}
-              disabled={isExporting}
-              className="flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
-            >
-              {isExporting ? 'Exporting...' : <><Download className="w-5 h-5 mr-2" /> Export CSV</>}
-            </button>
-            <button
-              onClick={() => handleExport('PDF')}
-              disabled={isExporting}
-              className="flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
-            >
-              {isExporting ? 'Exporting...' : <><Download className="w-5 h-5 mr-2" /> Export PDF</>}
-            </button>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => handleExport('CSV')}
+                disabled={isExporting}
+                className="flex items-center px-2 sm:px-4 py-2 text-xs sm:text-sm bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
+              >
+                {isExporting ? 'Exporting...' : <><Download className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" /> <span className="hidden sm:inline">Export </span>CSV</>}
+              </button>
+              <button
+                onClick={() => handleExport('PDF')}
+                disabled={isExporting}
+                className="flex items-center px-2 sm:px-4 py-2 text-xs sm:text-sm bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-200 transform hover:scale-105 disabled:opacity-50"
+              >
+                {isExporting ? 'Exporting...' : <><Download className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" /> <span className="hidden sm:inline">Export </span>PDF</>}
+              </button>
+            </div>
           </div>
         </header>
 
         {activeTab === 'overview' && (
           <>
-            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
               <MetricCard
                 title="Total Revenue"
                 value={data ? `$${data.metrics.revenue.toLocaleString()}` : '$0'}
@@ -890,7 +979,7 @@ const App = () => {
               />
             </section>
 
-            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <section className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
               <ChartContainer title="Revenue Over Time" isLoading={isLoading}>
                 <LineChartComponent data={data?.dailyMetrics} dataKey="revenue" name="Revenue" color="#10b981" gradient={true} />
               </ChartContainer>
@@ -908,7 +997,7 @@ const App = () => {
         )}
 
         {activeTab === 'charts' && (
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <section className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <ChartContainer title="Revenue Over Time" isLoading={isLoading}>
               <LineChartComponent data={data?.dailyMetrics} dataKey="revenue" name="Revenue" color="#10b981" gradient={true} />
             </ChartContainer>
