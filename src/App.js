@@ -892,22 +892,26 @@ const App = () => {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg"
+            className={`lg:hidden p-2 rounded-lg shadow-lg transition-colors duration-200 ${
+              theme === 'light' 
+                ? 'bg-gray-200 hover:bg-gray-300 text-gray-700' 
+                : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+            }`}
           >
             <Settings className="w-6 h-6" />
           </button>
           
-          <div className="flex items-center space-x-2 sm:space-x-4">
+          <div className="flex items-center space-x-3 sm:space-x-4 flex-1 justify-center lg:justify-start lg:flex-initial">
             <img 
               src="/brand_logo.png" 
               alt="ADmyBRAND Logo" 
-              className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg shadow-lg lg:hidden"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg shadow-lg lg:hidden"
               onError={(e) => {
                 e.target.style.display = 'none';
               }}
             />
             <div>
-              <h1 className="text-xl sm:text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800">
+              <h1 className="text-lg sm:text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800">
                 {activeTab === 'overview' && 'Insights Overview'}
                 {activeTab === 'charts' && 'Interactive Analytics Charts'}
                 {activeTab === 'table' && 'Campaign Performance Data'}
@@ -919,9 +923,13 @@ const App = () => {
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
             <button
               onClick={toggleTheme}
-              className={`p-2 sm:p-3 rounded-full ${theme === 'light' ? 'bg-gray-200 hover:bg-gray-300' : 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700'} transition-all duration-200 shadow-lg`}
+              className={`p-2 sm:p-3 rounded-full transition-all duration-200 shadow-lg ${
+                theme === 'light' 
+                  ? 'bg-gray-200 hover:bg-gray-300 text-gray-700' 
+                  : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+              }`}
             >
-              {theme === 'light' ? <Moon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" /> : <Sun className="w-5 h-5 sm:w-6 sm:h-6 text-gray-200" />}
+              {theme === 'light' ? <Moon className="w-5 h-5 sm:w-6 sm:h-6" /> : <Sun className="w-5 h-5 sm:w-6 sm:h-6" />}
             </button>
             <div className="flex space-x-2">
               <button
